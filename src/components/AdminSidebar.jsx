@@ -36,7 +36,7 @@ const Sidebar = () => {
           className='navbar-link'
           style={{ textAlign: "center", color: "white" }} 
           as={Link} 
-          to="/"
+          to="/dashboard"
         >
           <img
             src={dashboard}
@@ -49,7 +49,7 @@ const Sidebar = () => {
         className='navbar-link'
           style={{ textAlign: "center", color: "white" }} 
           as={Link} 
-          to="/agents"
+          to="/userspage"
         >
           <img
             src={usersNav}
@@ -88,7 +88,7 @@ const Sidebar = () => {
         className='navbar-link'
           style={{ textAlign: "center" , color: "white" }} 
           as={Link} 
-          to="/products"
+          to="/orders"
         >
           <img
             src={ordersNav}
@@ -102,7 +102,7 @@ const Sidebar = () => {
         className='navbar-link'
           style={{ textAlign: "center" , color: "white" }} 
           as={Link} 
-          to="/products"
+          to="/communications"
         >
           <img
             src={commNav}
