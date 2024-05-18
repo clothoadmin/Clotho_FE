@@ -18,6 +18,10 @@
     background-color: green;
   }
   
+  .logout-link:hover{
+    background-color: red;
+  }
+
   .sidebar.collapsed {
     width: 60px;
   }

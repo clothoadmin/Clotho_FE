@@ -5,7 +5,7 @@ import './styles.css';
 
 import avatar from '../assets/avatar.png'
 
-const AdminNavbar = ({ onLogout }) => {
+const AgentNavbar = ({ onLogout }) => {
   
   return (
     <div><Navbar bg="success" data-bs-theme="dark"sticky="top">
@@ -29,4 +29,4 @@ const AdminNavbar = ({ onLogout }) => {
   )
 }
 
-export default AdminNavbar
+export default AgentNavbar;

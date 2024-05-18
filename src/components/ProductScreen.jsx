@@ -84,7 +84,7 @@ const ProductScreen = () => {
         </Col>
         <Col md={1}></Col>
         <Col md={4} style={{textAlign:"end"}}>
-        <Button variant="success">Add New Product</Button>{' '}
+        <Button style={{width:'40%'}} variant="success">Add New Product</Button>{' '}
         </Col>
       </Row>
       <Table striped bordered hover>
@@ -113,8 +113,8 @@ const ProductScreen = () => {
               <td>{product.listby}</td>
               <td>{product.listed?'yes':'no'}</td>
               <td>
-                <Button variant="warning" onClick={() => handleEdit(product)}>Edit</Button>{' '}
-                <Button variant="danger" onClick={() => handleDelete(product.id)}>Delete</Button>
+                <Button style={{width:'30%'}} variant="warning" onClick={() => handleEdit(product)}>Edit</Button>{' '}
+                <Button style={{width:'35%'}} variant="danger" onClick={() => handleDelete(product.id)}>Delete</Button>
               </td>
             </tr>
           ))}

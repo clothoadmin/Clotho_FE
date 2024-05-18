@@ -11,6 +11,20 @@ export const addUser=async(user)=>{
     }
 
 }
+
+export const login = async(email,password)=>{
+    const data = {
+        email: email,
+        password: password
+      };
+    try{
+        const response= await axios.post(`${userUrl}/login`,data);
+        return response.data;
+    }
+    catch(error){
+        console.log('error while logging in',error.message)
+    }
+}
 export const getUsers=async()=>{
     
     try{

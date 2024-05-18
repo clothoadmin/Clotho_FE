@@ -40,9 +40,9 @@ const AgentScreen = () => {
               <td>{agent.address}</td>
               
               <td>
-                <Button variant="warning" >Edit</Button>{' '}
-                <Button variant="danger" >Delete</Button>{' '}
-                <Button variant="primary" >Promote</Button>
+                <Button style={{width:'30%'}} className='sm me-2' variant="outline-warning" >Edit</Button>{' '}
+                <Button style={{width:'30%'}} className='sm me-2' variant="outline-danger" >Delete</Button>{' '}
+                <Button style={{width:'30%'}} className='sm me-2' variant="outline-primary" >Promote</Button>
 
               </td>
             </tr>
