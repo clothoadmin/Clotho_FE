@@ -33,7 +33,7 @@ export const getAllListedProducts = async () => {
 };
 export const getProductById = async (id) => {
     try {
-        const response = await axios.get(`<span class="math-inline">\{productUrl\}/</span>{id}`);
+        const response = await axios.get(`${productUrl}/${id}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching product by ID:', error.message);
@@ -41,15 +41,30 @@ export const getProductById = async (id) => {
     }
 };
 
-export const createProduct = async (product) => {
+export const getproductByListedby = async (listby) => {
+    try{
+        const response = await axios.get(`${productUrl}/listby/${listby}`);
+        return response.data;
+    }
+    catch (error) {
+        console.error('Error fetching product by lister name:', error.message);
+        throw error;
+    }
+}
+
+export const createProduct = async (formData) => {
     try {
-        const response = await axios.post(`${productUrl}`, product);
+        const response = await axios.post(`${productUrl}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
         return response.data;
     } catch (error) {
         console.error('Error creating product:', error.message);
         throw error;
     }
-};
+}
 
 // If discount calculation is handled on the server (assuming an endpoint):
 export const calculateDiscount = async (data) => {
@@ -70,6 +85,24 @@ export const updateProduct = async (id, product) => {
         throw error;
     }
 };
+
+export const unlistProduct = async (id) =>{
+    try{
+        return await axios.put(`${productUrl}/unlist/${id}`);
+    }catch (error) {
+        console.error('Error updating product:', error.message);
+        throw error;
+    }
+};
+
+export const enlistProduct = async (id) =>{
+    try{
+        return await axios.put(`${productUrl}/enlist/${id}`);
+    }catch (error) {
+        console.error('Error updating product:', error.message);
+        throw error;
+    }
+}
 
 export const deleteProduct = async (id) => {
     try {

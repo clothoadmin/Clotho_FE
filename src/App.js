@@ -12,11 +12,15 @@ import OrdersPage from './components/OrdersPage';
 import Login from './components/Login';
 import AgentDashboard from './components/AgentDashboard';
 import HomePage from './components/HomePage';
+import  AboutUsPage from './components/AboutUsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import UserNavbar from './components/UserNavbar';
 import AgentSidebar from './components/AgentSidebar';
 import AgentNavbar from './components/AgentNavbar';
 import Register from './components/Register'; // Include register component if needed
+import WishlistPage from './components/WishlistPage';
+import AgentProductScreen from './components/AgentProductScreen';
+import AgentCommScreen from './components/AgentCommScreen';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -64,7 +68,7 @@ const App = () => {
             <Route path="/" element={<Login />} />
             <Route path="/registration" element={<Register />} />
             <Route path="/dashboard" element={<ProtectedRoute role="Admin" element={Dashboard} />} />
-            <Route path="/agent-dashboard" element={<ProtectedRoute role="Agent" element={AgentDashboard} />} />
+            <Route path="/agent-dashboard" element={<ProtectedRoute role="agent" element={AgentDashboard} />} />
             <Route path="/user-homepage" element={<ProtectedRoute role="user" element={HomePage} />} />
 
             {/* Admin Routes */}
@@ -74,6 +78,16 @@ const App = () => {
             <Route path="/orders" element={<ProtectedRoute role="Admin" element={OrdersPage} />} />
             <Route path="/products" element={<ProtectedRoute role="Admin" element={ProductScreen} />} />
             <Route path="/agents" element={<ProtectedRoute role="Admin" element={AgentScreen} />} />
+
+            {/* User Routes */}
+            <Route path="/about" element={<ProtectedRoute role="user" element={AboutUsPage} />} />
+            <Route path="/wishlist" element={<ProtectedRoute role="user" element={WishlistPage} />} />
+
+            {/* Agent Routes */}
+            <Route path="/agent-products" element={<ProtectedRoute role="agent" element={AgentProductScreen} />} />
+            <Route path="/agent-communication" element={<ProtectedRoute role="agent" element={AgentCommScreen} />} />
+
+
 
             <Route path="*" element={<h2>404 Not Found</h2>} />
           </Routes>

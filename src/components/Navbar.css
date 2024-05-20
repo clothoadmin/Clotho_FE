@@ -7,8 +7,9 @@ body {
   .navbar {
     padding-left: 0.25rem;
     padding-right: 0.25rem;
-    position: fixed;
+    position: sticky;
     top: 0;
+    left: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
