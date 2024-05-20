@@ -79,6 +79,14 @@ export const editUser=async(user,id)=>{
     }
 }
 
+export const promoteAgent = async(id) =>{
+    try{
+        return await axios.put(`${userUrl}/agents/promote/${id}`);
+    }catch(error){
+        console.log("error while calling update api",error.message);
+
+    }
+}
 
 export const deleteUser=async(id)=>{
     try{

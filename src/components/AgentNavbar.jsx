@@ -10,11 +10,11 @@ const AgentNavbar = ({ onLogout }) => {
   return (
     <div><Navbar bg="success" data-bs-theme="dark"sticky="top">
     <Container>
-      <Navbar.Brand as={Link} to="/">Clotho</Navbar.Brand>
+      <Navbar.Brand as={Link} to="/agent-dashboard">Clotho</Navbar.Brand>
       <Nav className=" justify-content-end">
-        <p className='mt-3' style={{color:"white", fontWeight:"bold"}}>Hello Admin</p>
+        <p className='mt-3' style={{color:"white", fontWeight:"bold"}}>Hello Agent</p>
         
-        <Dropdown  >
+        <Dropdown>
         <Dropdown.Toggle as="a" className="nav-link p-0" style={{ cursor: 'pointer', marginTop:'0.75rem' }}>
               <img className='mx-2' src={avatar} style={{ height: '32px', width: '32px' }} alt="avatar" />
             </Dropdown.Toggle>
