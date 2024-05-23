@@ -11,11 +11,15 @@ import comm from '../assets/comm.png';
 import './styles.css';
 import {getTotalUsers, getTotalAgents} from '../service/userAPI';
 import { getTotalProducts } from '../service/productAPI';
+import { getTotalOrders } from '../service/orderAPI';
+import { getTotalMessages } from '../service/commAPI';
 
 const Dashboard = () => {
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalAgents, setTotalAgents] = useState(0);
   const [totalProducts, setTotalProducts] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalMsgs, setTotalMsgs] = useState(0);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -50,9 +54,31 @@ const Dashboard = () => {
       }
     }
 
+    const fetchOrders = async() =>{
+      try{
+        const total = await getTotalOrders();
+        console.log('Total Orders', total);
+        setTotalOrders(total);
+      }
+      catch(error){
+        console.error('error fetching products:', error);
+      }
+    }
+    const fetchMessages = async()=>{
+      try{
+        const total = await getTotalMessages();
+        console.log('Total messages', total);
+        setTotalMsgs(total);
+      }
+      catch(error){
+        console.error('error fetching messages:', error);
+      }
+    }
     fetchUsers();
     fetchAgents();
     fetchProducts();
+    fetchOrders();
+    fetchMessages();
   }, []);
   return (
     <div>
@@ -122,9 +148,9 @@ const Dashboard = () => {
       <Row>
           <Col md={8}>
             <Card.Title>Orders</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+            <Card.Subtitle className="mb-2 text-muted">{totalOrders}</Card.Subtitle>
         
-            <Card.Link className="btn btn-success mt-4" href="#">View Orders</Card.Link>
+            <Card.Link className="btn btn-success mt-4" as={Link} to="/orders">View Orders</Card.Link>
           </Col>
           <Col md={4} className='pt-2'>
           <Image src={order} rounded fluid />
@@ -139,9 +165,9 @@ const Dashboard = () => {
       <Row>
           <Col md={8}>
             <Card.Title>Communications</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+            <Card.Subtitle className="mb-2 text-muted"> {totalMsgs}</Card.Subtitle>
         
-            <Card.Link className="btn btn-success mt-4" href="#">View Communications</Card.Link>
+            <Card.Link className="btn btn-success mt-4" as={Link} to="/communications">View Communications</Card.Link>
           </Col>
           <Col md={4} className='pt-2'>
           <Image src={comm} rounded fluid />

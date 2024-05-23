@@ -1,5 +1,3 @@
-// Register.jsx
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Register.css';
@@ -12,11 +10,11 @@ function Register() {
     email: '',
     password: '',
     confirmPassword: '',
-    role:'user',
+    role: 'user',
     name: '',
     address: '',
-    city: '',  
-    postalCode: '' 
+    city: '',
+    postalCode: ''
   });
   const [error, setError] = useState('');
 
@@ -25,16 +23,38 @@ function Register() {
     setUserData({ ...user, [name]: value });
   };
 
+  const validateForm = () => {
+    const { username, email, password, confirmPassword, name, address, city, postalCode } = user;
+    if (!username || !email || !password || !confirmPassword || !name || !address || !city || !postalCode) {
+      return "All fields are required.";
+    }
+    if (password !== confirmPassword) {
+      return "Passwords do not match.";
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return "Invalid email format.";
+    }
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
     try {
       await addUserDetails();
       navigate('/'); 
     } catch (error) {
+      console.log(error)
       if (error.response && error.response.status === 409) {
         setError(error.response.data);
+
       } else {
-        setError('User exists!');
+        setError('User Exists!');
       }
     }
   };
@@ -130,7 +150,7 @@ function Register() {
               </td>
             </tr>
             <tr>
-            <td>
+              <td>
                 <input
                   type="text"
                   id="postalCode"
@@ -146,7 +166,7 @@ function Register() {
         <div className="login-link">
           Already a user? <Link to="/">Login</Link>
         </div>
-        <br></br>
+        <br />
         <button type="submit">REGISTER</button>
         {error && <div className="error-message">{error}</div>}
       </form>

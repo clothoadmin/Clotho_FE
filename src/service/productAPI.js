@@ -52,6 +52,18 @@ export const getproductByListedby = async (listby) => {
     }
 }
 
+export const getTotalListByProducts = async (listby) =>{
+    try{
+        const response = await axios.get(`${productUrl}/listby/${listby}`);
+        return response.data.length;
+    }
+    catch (error) {
+        console.error('Error fetching product by lister name:', error.message);
+        throw error;
+    }
+}
+
+
 export const createProduct = async (formData) => {
     try {
         const response = await axios.post(`${productUrl}`, formData, {
@@ -76,9 +88,13 @@ export const calculateDiscount = async (data) => {
         throw error;
     }
 };
-export const updateProduct = async (id, product) => {
+export const updateProduct = async (id, formData) => {
     try {
-        const response = await axios.put(`${productUrl}/${id}`, product);
+        const response = await axios.put(`${productUrl}/${id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
         return response.data;
     } catch (error) {
         console.error('Error updating product:', error.message);

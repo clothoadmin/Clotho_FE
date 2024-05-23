@@ -7,7 +7,6 @@ import ProductScreen from './components/ProductScreen';
 import AgentScreen from './components/AgentScreen';
 import AdminNavbar from './components/AdminNavbar';
 import Communications from './components/Communications';
-import UsersPage from './components/UsersPage';
 import OrdersPage from './components/OrdersPage';
 import Login from './components/Login';
 import AgentDashboard from './components/AgentDashboard';
@@ -21,6 +20,14 @@ import Register from './components/Register'; // Include register component if n
 import WishlistPage from './components/WishlistPage';
 import AgentProductScreen from './components/AgentProductScreen';
 import AgentCommScreen from './components/AgentCommScreen';
+import WishList from './components/WishList';
+import EditProfile from './components/EditProfile';
+import CartPage from './components/CartPage';
+import CheckoutPage from './components/CheckoutPage';
+import OrderSummary from './components/OrderSummary';
+import UserOrdersPage from './components/UserOrdersPage';
+import ForgotPassword from './components/ForgotPassword';
+
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -41,11 +48,11 @@ const App = () => {
   if (user) {
     switch (user.role.toLowerCase()) {
       case 'admin':
-        NavbarComponent = <AdminNavbar onLogout={handleLogout} />;
+        NavbarComponent = <AdminNavbar onLogout={handleLogout} userId={user.id}/>;
         SidebarComponent = <AdminSidebar />;
         break;
       case 'agent':
-        NavbarComponent = <AgentNavbar onLogout={handleLogout} />;
+        NavbarComponent = <AgentNavbar onLogout={handleLogout} userId={user.id}/>;
         SidebarComponent = <AgentSidebar />;
         break;
       case 'user':
@@ -67,6 +74,9 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/registration" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword/>} />
+
+            {/* Login Routes */}
             <Route path="/dashboard" element={<ProtectedRoute role="Admin" element={Dashboard} />} />
             <Route path="/agent-dashboard" element={<ProtectedRoute role="agent" element={AgentDashboard} />} />
             <Route path="/user-homepage" element={<ProtectedRoute role="user" element={HomePage} />} />
@@ -74,18 +84,23 @@ const App = () => {
             {/* Admin Routes */}
             <Route path="/dashboard" element={<ProtectedRoute role="Admin" element={Dashboard} />} />
             <Route path="/communications" element={<ProtectedRoute role="Admin" element={Communications} />} />
-            <Route path="/userspage" element={<ProtectedRoute role="Admin" element={UsersPage} />} />
             <Route path="/orders" element={<ProtectedRoute role="Admin" element={OrdersPage} />} />
             <Route path="/products" element={<ProtectedRoute role="Admin" element={ProductScreen} />} />
             <Route path="/agents" element={<ProtectedRoute role="Admin" element={AgentScreen} />} />
+            <Route path="/edit-profile/:userId"  element={<ProtectedRoute role="Admin" element={EditProfile } />} /> 
 
             {/* User Routes */}
-            <Route path="/about" element={<ProtectedRoute role="user" element={AboutUsPage} />} />
-            <Route path="/wishlist" element={<ProtectedRoute role="user" element={WishlistPage} />} />
+            <Route path="/wishlist" element={<ProtectedRoute role="user" element={WishList} />} /> 
+            <Route path="/edit-profile/:userId"  element={<ProtectedRoute role="user" element={EditProfile } />} /> 
+            <Route path="/cart"  element={<ProtectedRoute role="user" element={CartPage} />} /> 
+            <Route path="/checkout"  element={<ProtectedRoute role="user" element={CheckoutPage} />} /> 
+            <Route path="/order-confirmation"  element={<ProtectedRoute role="user" element={OrderSummary} />} /> 
+            <Route path="/user-orders-page"  element={<ProtectedRoute role="user" element={UserOrdersPage} />} /> 
 
             {/* Agent Routes */}
             <Route path="/agent-products" element={<ProtectedRoute role="agent" element={AgentProductScreen} />} />
             <Route path="/agent-communication" element={<ProtectedRoute role="agent" element={AgentCommScreen} />} />
+            <Route path="/agent/edit-profile/:userId"  element={<ProtectedRoute role="agent" element={EditProfile } />} /> 
 
 
 
