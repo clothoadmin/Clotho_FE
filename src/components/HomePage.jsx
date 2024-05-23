@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Modal, Image, Toast, ToastContainer } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { getAllListedProducts, getProductById } from '../service/productAPI';
-import { addWishlistItem } from '../service/wishlistAPI';
+import { addWishlistItem, deleteWishlistItem } from '../service/wishlistAPI';
+import cartAPI from '../service/cartAPI';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './Product.css';
+import ContactUs from './ContactUs';
 
 const HomePage = () => {
   const [fetchedProducts, setFetchedProducts] = useState([]);
@@ -72,14 +74,32 @@ const HomePage = () => {
       setToastVariant('danger');
     }
   };
+  const handleAddToCart = async (productId) => {
+    try {
+      // Add the product to the cart using only the product ID and user ID
+      await cartAPI.addCartItem({
+        userId: user.id,
+        productId: productId,
+      });
+      setShowToast(true);
+      setToastMessage('Added to cart!');
+      setToastVariant('success');
+      // Remove the product from the wishlist
+      await deleteWishlistItem(user.id, productId);
+      
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
+  };
+
 
   const filteredProducts = fetchedProducts.filter((product) =>
     product.pname.toLowerCase().includes(searchQuery)
   );
 
   return (
-    <div>
-      <Container fluid>
+    <>
+      <Container fluid style={{height:'90vh'}}> 
         <Form.Control
           style={{ padding: '0.6rem', borderRadius: '2rem', width: '95%', border: '1px solid green' }}
           type="text"
@@ -95,6 +115,7 @@ const HomePage = () => {
                 <Card.Body>
                   <Card.Title>{product.pname}</Card.Title>
                   <Card.Text>{product.price}</Card.Text>
+                  {(product.qty > 5)?<p>Qty: {product.qty}</p>:(product.qty > 1)?<p style={{color:'red'}}>Hurry! Limited stock left</p>:<p style={{color:'red'}}>Hurry! Only 1 item left</p>}
                   <Button title="Add to Wishlist" onClick={() => addToWishlist(product.id)} style={{ width: '20%' }} variant="success">
                     <i className="fas fa-heart"></i>
                   </Button>{' '}
@@ -112,7 +133,7 @@ const HomePage = () => {
           ))}
         </Row>
       </Container>
-
+        <ContactUs/>
       <Modal
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -146,19 +167,15 @@ const HomePage = () => {
           <Container fluid>
             <Row>
               <Col xs={6}>
-                <Button variant="success" onClick={handleCloseModal} style={{ width: '100%' }}>
+                <Button variant="success" onClick={() => handleAddToCart(selectedProduct.id)} style={{ width: '100%' }}>
                   Add to Cart
                 </Button>
               </Col>
               <Col xs={6}>
                 {selectedProduct && (
-                  <Button
-                    variant="warning"
-                    style={{ width: '100%' }}
-                    onClick={() => navigate(`/product/${selectedProduct.id}`)}
-                  >
-                    Buy Now
-                  </Button>
+                  <Button title="Add to Wishlist" onClick={() => addToWishlist(selectedProduct.id)} style={{ width: '100%' }}  variant="outline-success">
+                    Add to Wishlist
+                </Button>
                 )}
               </Col>
             </Row>
@@ -174,7 +191,7 @@ const HomePage = () => {
           <Toast.Body>{toastMessage}</Toast.Body>
         </Toast>
       </ToastContainer>
-    </div>
+    </>
   );
 };
 

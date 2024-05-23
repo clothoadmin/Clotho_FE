@@ -7,7 +7,6 @@ import expand from '../assets/expand.png';
 import dashboard from '../assets/dashboard.png';
 import productNav from '../assets/productNav.png';
 import agentNav from '../assets/agentNav.png';
-import usersNav from '../assets/usersNav.png';
 import ordersNav from '../assets/ordersNav.png';
 import commNav from '../assets/commNav.png';
 
@@ -45,19 +44,7 @@ const Sidebar = () => {
           />
           {isExpanded && <span style={{marginLeft:'0.5rem'}}> Dashboard</span>}
         </Nav.Link>
-        <Nav.Link 
-        className='navbar-link'
-          style={{ textAlign: "center", color: "white" }} 
-          as={Link} 
-          to="/userspage"
-        >
-          <img
-            src={usersNav}
-            alt='product_icon'
-            style={{ height: '20px' }}
-          />
-          {isExpanded && <span style={{marginLeft:'0.5rem'}}>Users</span>}
-        </Nav.Link>
+    
         <Nav.Link 
         className='navbar-link'
           style={{ textAlign: "center", color: "white" }} 

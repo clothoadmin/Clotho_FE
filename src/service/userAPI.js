@@ -8,6 +8,7 @@ export const addUser=async(user)=>{
     }catch(error)
     {
         console.log('Error while calling adduser Api ',error.message);
+        throw error;
     }
 
 }
@@ -19,7 +20,7 @@ export const login = async(email,password)=>{
       };
     try{
         const response= await axios.post(`${userUrl}/login`,data);
-        return response.data;
+        return response;
     }
     catch(error){
         console.log('error while logging in',error.message)
@@ -44,6 +45,17 @@ export const getTotalAgents = async(role) =>{
     }
 }
 
+
+export const getUserByEmail = async(email) => {
+    try{
+        const response = await axios.get(`${userUrl}/email/${email}`);
+        return response.data;
+    }catch(error){
+        console.log('error while finding user',error.message);
+        throw error;
+    }
+}
+
 export const getAllAgents = async(role) =>{
     try{
         const response = await axios.get(`${userUrl}/role/${role}`);
@@ -56,7 +68,7 @@ export const getAllAgents = async(role) =>{
  export const getUser=async(id)=>{
         id=id || '';
         try{
-            return await axios.get(`${userUrl}/users/${id}`);
+            return await axios.get(`${userUrl}/${id}`);
         }catch(error){
             console.log('Error while calling getUsers api',error.message);
         }
@@ -70,14 +82,18 @@ export const getTotalUsers=async()=>{
         console.log('Error while calling getUsers api',error.message);
     }
 }
-export const editUser=async(user,id)=>{
-    try{
-    return await axios.put(`${userUrl}/user` ,user)
-    }catch(error){
-        console.log("error while calling update api",error.message);
-
+export const editUser = async (id, user) => {
+    try {
+      return await axios.put(`${userUrl}/${id}`, user, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.log("Error while calling update api", error.message);
+      throw error; // Re-throw the error to handle it in the component
     }
-}
+  };
 
 export const promoteAgent = async(id) =>{
     try{
@@ -90,7 +106,7 @@ export const promoteAgent = async(id) =>{
 
 export const deleteUser=async(id)=>{
     try{
-        return await axios.delete(`${userUrl}/user/${id}`);
+        return await axios.delete(`${userUrl}/${id}`);
     }catch(error){
         console.log("error while calling delete api",error.message);
 

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { getproductByListedby, createProduct, enlistProduct, unlistProduct } from '../service/productAPI';
+import { getproductByListedby, createProduct, enlistProduct, unlistProduct,getProductById, deleteProduct } from '../service/productAPI';
 import { Table, Container, Button, Modal, Form, InputGroup, FormControl, Row, Col, Toast } from 'react-bootstrap';
+import UpdateProductModal from './updateProductModal';
+
 
 const AgentProductScreen = () => {
     const [fetchedProducts, setFetchedProducts] = useState([]);
@@ -8,6 +10,9 @@ const AgentProductScreen = () => {
     const [searchInput, setSearchInput] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [showToast, setShowToast] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
 
     const user = JSON.parse(sessionStorage.getItem('user'));
     const email = user.email;
@@ -92,6 +97,15 @@ const AgentProductScreen = () => {
         }
     };
 
+    const handleEdit = async (id) => {
+        const product = await getProductById(id);
+        setSelectedProduct(product)
+        setShowEditModal(true);
+      };
+    
+      const handleCloseEditModal = () => {
+        setShowEditModal(false);
+      };
     const handleUnlisting = async (id) => {
         try {
             const response = await unlistProduct(id);
@@ -106,6 +120,17 @@ const AgentProductScreen = () => {
             console.error('Error updating product:', error);
         }
     };
+
+    const handleDelete = async (id) => {
+        try {
+          await deleteProduct(id);
+          alert('product deleted successfully');
+          setFetchedProducts(fetchedProducts.filter(fetchedProduct => fetchedProduct.id !== id));
+          fetchProducts();
+        } catch (error) {
+          alert('Error deleting product:', error);
+        }
+      };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -172,8 +197,8 @@ const AgentProductScreen = () => {
                                 <td>{product.listby}</td>
                                 <td>{product.listed ? 'yes' : 'no'}</td>
                                 <td>
-                                    <Button style={{ width: '30%' }} variant="warning">Edit</Button>{' '}
-                                    <Button style={{ width: '35%' }} variant="danger">Delete</Button>{' '}
+                                    <Button style={{ width: '30%' }} variant="warning"onClick={() => handleEdit(product.id)}>Edit</Button>{' '}
+                                    <Button style={{ width: '35%' }} variant="danger"onClick={() => handleDelete(product.id)}>Delete</Button>{' '}
                                     {(product.listed) ?
                                         <Button style={{ width: '30%' }} variant="secondary" onClick={() => handleUnlisting(product.id)}>Unlist</Button>
                                         :
@@ -184,6 +209,14 @@ const AgentProductScreen = () => {
                         ))}
                     </tbody>
                 </Table>
+
+                {selectedProduct && (
+                <UpdateProductModal
+                    show={showEditModal}
+                    handleClose={handleCloseEditModal}
+                    product={selectedProduct}
+                />
+            )}
             </Container>
 
             <Modal show={showModal} onHide={handleClose} centered>

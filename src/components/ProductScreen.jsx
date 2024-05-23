@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Container, Button, Modal, Form, InputGroup, FormControl, Row, Col, Toast } from 'react-bootstrap';
-import { createProduct, unlistProduct, enlistProduct } from '../service/productAPI';
+import { createProduct, unlistProduct, enlistProduct,getProductById, deleteProduct } from '../service/productAPI';
+import UpdateProductModal from './updateProductModal';
 const ProductScreen = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -11,13 +12,7 @@ const ProductScreen = () => {
   const [showToast, setShowToast] = useState(false);
   const [file, setFile] = useState(null);
 
-  const [currentProduct, setCurrentProduct] = useState({
-    id: '',
-    name: '',
-    category: '',
-    price: '',
-    stock: '',
-  });
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const user = JSON.parse(sessionStorage.getItem('user'));
     const email = user.email;
     const [newProduct, setNewProduct] = useState({
@@ -124,29 +119,28 @@ const handleFileChange = (e) => {
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+  };
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://api.example.com/products/${id}`); // Replace with your API endpoint
+      await deleteProduct(id);
+      alert('product deleted successfully');
       setProducts(products.filter(product => product.id !== id));
+      fetchProducts();
     } catch (error) {
-      console.error('Error deleting product:', error);
+      alert('Error deleting product:', error);
     }
   };
 
-  const handleEdit = (product) => {
-    setCurrentProduct(product);
+  const handleEdit = async (id) => {
+    const product = await getProductById(id);
+    setSelectedProduct(product)
     setShowEditModal(true);
   };
 
-  const handleSaveChanges = async () => {
-    try {
-      await axios.put(`https://api.example.com/products/${currentProduct.id}`, currentProduct); // Replace with your API endpoint
-      setProducts(products.map(product => product.id === currentProduct.id ? currentProduct : product));
-      setShowEditModal(false);
-    } catch (error) {
-      console.error('Error updating product:', error);
-    }
-  };
+  
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
@@ -207,7 +201,7 @@ const handleFileChange = (e) => {
               <td>{product.listby}</td>
               <td>{product.listed?'yes':'no'}</td>
               <td>
-                <Button style={{width:'30%'}} variant="warning" onClick={() => handleEdit(product)}>Edit</Button>{' '}
+                <Button style={{width:'30%'}} variant="warning" onClick={() => handleEdit(product.id)}>Edit</Button>{' '}
                 <Button style={{width:'35%'}} variant="danger" onClick={() => handleDelete(product.id)}>Delete</Button>{' '}
                 {(product.listed)?
                 <Button style={{width:'30%'}} variant="secondary" onClick={() => handleUnlisting(product.id)}>Unlist</Button>
@@ -221,56 +215,14 @@ const handleFileChange = (e) => {
           ))}
         </tbody>
       </Table>
-
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Product</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formProductName">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={currentProduct.name}
-                onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="formProductCategory">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                type="text"
-                value={currentProduct.category}
-                onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="formProductPrice">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="number"
-                value={currentProduct.price}
-                onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="formProductStock">
-              <Form.Label>Stock</Form.Label>
-              <Form.Control
-                type="number"
-                value={currentProduct.stock}
-                onChange={(e) => setCurrentProduct({ ...currentProduct, stock: e.target.value })}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSaveChanges}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {selectedProduct && (
+                <UpdateProductModal
+                    show={showEditModal}
+                    handleClose={handleCloseEditModal}
+                    product={selectedProduct}
+                />
+            )}
+      
 
       <Modal show={showModal} onHide={handleClose} centered>
                 <Modal.Header closeButton>
