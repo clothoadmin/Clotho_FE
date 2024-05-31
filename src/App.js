@@ -72,7 +72,7 @@ const App = () => {
         {SidebarComponent}
         <div style={{ marginLeft: '60px', padding: '20px', width: '100%' }}>
           <Routes>
-            <Route path="/*" element={<Login />} />
+            <Route path="/" element={<Login />} />
             <Route path="/registration" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword/>} />
 
